@@ -6,13 +6,16 @@ namespace Domain.Entities
     {
         public ProgrammingLanguage()
         {
+            Technologies = new HashSet<Technology>();
         }
 
-        public ProgrammingLanguage(int id, string name) : base(id)
+        public ProgrammingLanguage(int id, string name) : this()
         {
+            Id = id;
             Name = name;
         }
 
         public string Name { get; set; }
+        public virtual ICollection<Technology> Technologies { get; set; }
     }
 }

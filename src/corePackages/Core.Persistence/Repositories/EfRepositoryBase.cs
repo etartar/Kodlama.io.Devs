@@ -19,7 +19,14 @@ namespace Core.Persistence.Repositories
 
         public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate)
         {
-            return await Context.Set<TEntity>().FirstOrDefaultAsync(predicate);
+            return await Query().FirstOrDefaultAsync(predicate);
+        }
+
+        public async Task<TEntity?> GetAsync(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            IQueryable<TEntity> queryable = Query();
+            if (include != null) queryable = include(queryable);
+            return await queryable.FirstOrDefaultAsync(predicate);
         }
 
         public async Task<IPaginate<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? predicate = null,
@@ -76,7 +83,14 @@ namespace Core.Persistence.Repositories
 
         public TEntity? Get(Expression<Func<TEntity, bool>> predicate)
         {
-            return Context.Set<TEntity>().FirstOrDefault(predicate);
+            return Query().FirstOrDefault(predicate);
+        }
+
+        public TEntity? Get(Expression<Func<TEntity, bool>> predicate, Func<IQueryable<TEntity>, IIncludableQueryable<TEntity, object>>? include = null)
+        {
+            IQueryable<TEntity> queryable = Query();
+            if (include != null) queryable = include(queryable);
+            return queryable.FirstOrDefault(predicate);
         }
 
         public IPaginate<TEntity> GetList(Expression<Func<TEntity, bool>>? predicate = null,

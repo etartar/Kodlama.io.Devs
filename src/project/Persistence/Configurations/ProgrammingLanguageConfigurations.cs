@@ -13,6 +13,8 @@ namespace Persistence.Configurations
             builder.Property(p => p.Id).HasColumnName("Id");
             builder.Property(p => p.Name).HasColumnName("Name").IsRequired();
 
+            builder.HasMany(p => p.Technologies);
+
             ProgrammingLanguage[] languages = {
                 new(1, "C#"),
                 new(2, "Java"),

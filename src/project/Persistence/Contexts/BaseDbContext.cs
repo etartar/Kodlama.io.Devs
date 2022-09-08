@@ -15,6 +15,7 @@ namespace Persistence.Contexts
         }
 
         public DbSet<ProgrammingLanguage> ProgrammingLanguages { get; set; }
+        public DbSet<Technology> Technologies { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

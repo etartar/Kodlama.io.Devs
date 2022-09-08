@@ -32,8 +32,7 @@ namespace Core.CrossCuttingConcerns.Exceptions
 
             if (exception.GetType() == typeof(ValidationException)) return CreateValidationException(context, exception);
             if (exception.GetType() == typeof(BusinessException)) return CreateBusinessException(context, exception);
-            if (exception.GetType() == typeof(AuthorizationException))
-                return CreateAuthorizationException(context, exception);
+            if (exception.GetType() == typeof(AuthorizationException)) return CreateAuthorizationException(context, exception);
             return CreateInternalException(context, exception);
         }
 
@@ -85,7 +84,7 @@ namespace Core.CrossCuttingConcerns.Exceptions
         {
             context.Response.StatusCode = Convert.ToInt32(HttpStatusCode.InternalServerError);
 
-            return context.Response.WriteAsync(new ProblemDetails
+            return context.Response.WriteAsync(new InternalProblemDetails
             {
                 Status = StatusCodes.Status500InternalServerError,
                 Type = "https://example.com/probs/internal",
