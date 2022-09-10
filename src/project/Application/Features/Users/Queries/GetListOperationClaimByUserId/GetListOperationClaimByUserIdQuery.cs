@@ -1,6 +1,6 @@
 ﻿using Application.Features.Users.Rules;
 using Application.Services.Repositories;
-using Core.Security.Entities;
+using Core.Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 

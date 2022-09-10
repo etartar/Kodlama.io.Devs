@@ -2,8 +2,8 @@
 using Application.Features.Users.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Security.Entities;
-using Core.Security.Enums;
+using Core.Domain.Entities;
+using Core.Domain.Enums;
 using Core.Security.Hashing;
 using Core.Security.JWT;
 using MediatR;

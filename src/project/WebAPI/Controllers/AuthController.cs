@@ -3,7 +3,7 @@ using Application.Features.Users.Dtos;
 using Application.Features.Users.Queries.GetListOperationClaimByUserId;
 using Application.Features.Users.Queries.LoginUser;
 using AutoMapper;
-using Core.Security.Entities;
+using Core.Domain.Entities;
 using Core.Security.JWT;
 using Microsoft.AspNetCore.Mvc;
 

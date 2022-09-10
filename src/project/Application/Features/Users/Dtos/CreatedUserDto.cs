@@ -1,4 +1,4 @@
-﻿using Core.Security.Enums;
+﻿using Core.Domain.Enums;
 
 namespace Application.Features.Users.Dtos
 {

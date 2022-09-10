@@ -22,7 +22,7 @@ namespace Persistence.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder, 1L, 1);
 
-            modelBuilder.Entity("Core.Security.Entities.EmailAuthenticator", b =>
+            modelBuilder.Entity("Core.Domain.Entities.EmailAuthenticator", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -50,7 +50,7 @@ namespace Persistence.Migrations
                     b.ToTable("EmailAuthenticators", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.OperationClaim", b =>
+            modelBuilder.Entity("Core.Domain.Entities.OperationClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -69,7 +69,7 @@ namespace Persistence.Migrations
                     b.ToTable("OperationClaims", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.OtpAuthenticator", b =>
+            modelBuilder.Entity("Core.Domain.Entities.OtpAuthenticator", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -98,7 +98,7 @@ namespace Persistence.Migrations
                     b.ToTable("OtpAuthenticators", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Core.Domain.Entities.RefreshToken", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -152,7 +152,7 @@ namespace Persistence.Migrations
                     b.ToTable("RefreshTokens", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.User", b =>
+            modelBuilder.Entity("Core.Domain.Entities.User", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -199,7 +199,7 @@ namespace Persistence.Migrations
                     b.ToTable("Users", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.UserOperationClaim", b =>
+            modelBuilder.Entity("Core.Domain.Entities.UserOperationClaim", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
@@ -286,9 +286,39 @@ namespace Persistence.Migrations
                     b.ToTable("Technologies", (string)null);
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.EmailAuthenticator", b =>
+            modelBuilder.Entity("Domain.Entities.UserProfileLink", b =>
                 {
-                    b.HasOne("Core.Security.Entities.User", "User")
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasColumnName("Id");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"), 1L, 1);
+
+                    b.Property<string>("Link")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Link");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)")
+                        .HasColumnName("Name");
+
+                    b.Property<int>("UserId")
+                        .HasColumnType("int")
+                        .HasColumnName("UserId");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserProfileLinks", (string)null);
+                });
+
+            modelBuilder.Entity("Core.Domain.Entities.EmailAuthenticator", b =>
+                {
+                    b.HasOne("Core.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -297,9 +327,9 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.OtpAuthenticator", b =>
+            modelBuilder.Entity("Core.Domain.Entities.OtpAuthenticator", b =>
                 {
-                    b.HasOne("Core.Security.Entities.User", "User")
+                    b.HasOne("Core.Domain.Entities.User", "User")
                         .WithMany()
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -308,9 +338,9 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.RefreshToken", b =>
+            modelBuilder.Entity("Core.Domain.Entities.RefreshToken", b =>
                 {
-                    b.HasOne("Core.Security.Entities.User", "User")
+                    b.HasOne("Core.Domain.Entities.User", "User")
                         .WithMany("RefreshTokens")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -319,15 +349,15 @@ namespace Persistence.Migrations
                     b.Navigation("User");
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.UserOperationClaim", b =>
+            modelBuilder.Entity("Core.Domain.Entities.UserOperationClaim", b =>
                 {
-                    b.HasOne("Core.Security.Entities.OperationClaim", "OperationClaim")
+                    b.HasOne("Core.Domain.Entities.OperationClaim", "OperationClaim")
                         .WithMany()
                         .HasForeignKey("OperationClaimId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("Core.Security.Entities.User", "User")
+                    b.HasOne("Core.Domain.Entities.User", "User")
                         .WithMany("UserOperationClaims")
                         .HasForeignKey("UserId")
                         .OnDelete(DeleteBehavior.Cascade)
@@ -349,7 +379,18 @@ namespace Persistence.Migrations
                     b.Navigation("ProgrammingLanguage");
                 });
 
-            modelBuilder.Entity("Core.Security.Entities.User", b =>
+            modelBuilder.Entity("Domain.Entities.UserProfileLink", b =>
+                {
+                    b.HasOne("Core.Domain.Entities.User", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("Core.Domain.Entities.User", b =>
                 {
                     b.Navigation("RefreshTokens");
 

@@ -1,4 +1,4 @@
-﻿using Core.Security.Entities;
+﻿using Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -21,6 +21,7 @@ namespace Persistence.Configurations
 
             builder.HasMany(u => u.UserOperationClaims);
             builder.HasMany(u => u.RefreshTokens);
+            //builder.HasMany(u => u.UserProfileLinks);
         }
     }
 }

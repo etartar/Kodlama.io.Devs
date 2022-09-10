@@ -1,6 +1,6 @@
-﻿using Core.Persistence.Repositories;
+﻿using Core.Domain.Entities.Base;
 
-namespace Core.Security.Entities
+namespace Core.Domain.Entities
 {
     public class UserOperationClaim : Entity
     {
