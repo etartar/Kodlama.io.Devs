@@ -26,7 +26,7 @@ namespace Application.Features.Technologies.Rules
             if (result.Items.Any()) throw new BusinessException("Technology name exists.");
         }
 
-        public void TechnologyShouldExistWhenRequested(Technology technology)
+        public void TechnologyShouldExistWhenRequested(Technology? technology)
         {
             if (technology == null) throw new BusinessException("Requested technology does not exist.");
         }

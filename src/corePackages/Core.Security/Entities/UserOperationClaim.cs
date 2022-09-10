@@ -8,8 +8,9 @@ namespace Core.Security.Entities
         {
         }
 
-        public UserOperationClaim(int id, int userId, int operationClaimId) : base(id)
+        public UserOperationClaim(int id, int userId, int operationClaimId) : this()
         {
+            Id = id;
             UserId = userId;
             OperationClaimId = operationClaimId;
         }

@@ -11,8 +11,9 @@ namespace Core.Security.Entities
             RefreshTokens = new HashSet<RefreshToken>();
         }
 
-        public User(int id, string firstName, string lastName, string email, byte[] passwordSalt, byte[] passwordHash, bool status, AuthenticatorType authenticatorType) : base(id)
+        public User(int id, string firstName, string lastName, string email, byte[] passwordSalt, byte[] passwordHash, bool status, AuthenticatorType authenticatorType) : this()
         {
+            Id = id;
             FirstName = firstName;
             LastName = lastName;
             Email = email;
