@@ -1,4 +1,4 @@
-﻿using Core.Domain.Entities;
+﻿using Core.Security.Entities;
 using Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;

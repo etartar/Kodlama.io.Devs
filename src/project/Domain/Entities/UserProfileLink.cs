@@ -1,5 +1,5 @@
-﻿using Core.Domain.Entities;
-using Core.Domain.Entities.Base;
+﻿using Core.Persistence.Repositories;
+using Core.Security.Entities;
 
 namespace Domain.Entities
 {

@@ -1,58 +1,55 @@
-﻿using Application.Features.Users.Commands.RegisterUser;
-using Application.Features.Users.Dtos;
-using Application.Features.Users.Queries.GetListOperationClaimByUserId;
-using Application.Features.Users.Queries.LoginUser;
-using AutoMapper;
-using Core.Domain.Entities;
-using Core.Security.JWT;
+﻿using Application.Features.Auths.Commands.Register;
+using Application.Features.Auths.Dtos;
+using Application.Features.Auths.Queries.Login;
+using Core.Security.Dtos;
+using Core.Security.Entities;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
-    [Route("api/[controller]/[action]")]
+    [Route("api/[controller]")]
     [ApiController]
     public class AuthController : BaseController
     {
-        private readonly ITokenHelper _tokenHelper;
-        private readonly IMapper _mapper;
-
-        public AuthController(ITokenHelper tokenHelper, IMapper mapper)
+        [HttpPost("Login")]
+        public async Task<IActionResult> Login([FromBody] UserForLoginDto userForLoginDto)
         {
-            _tokenHelper = tokenHelper;
-            _mapper = mapper;
+            LoginQuery loginQuery = new()
+            {
+                UserForLoginDto = userForLoginDto,
+                IpAddress = GetIpAddress()
+            };
+
+            LoginedDto result = await Mediator.Send(loginQuery);
+            SetRefreshTokenToCookie(result.RefreshToken);
+
+            return Ok(result.AccessToken);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Login([FromBody] LoginUserQuery loginUserQuery)
+        [HttpPost("Register")]
+        public async Task<IActionResult> Register([FromBody] UserForRegisterDto userForRegisterDto)
         {
-            LoginUserDto result = await Mediator.Send(loginUserQuery);
+            RegisterCommand registerCommand = new()
+            {
+                UserForRegisterDto = userForRegisterDto,
+                IpAddress = GetIpAddress()
+            };
 
-            User mappedUser = _mapper.Map<User>(result);
+            RegisteredDto result = await Mediator.Send(registerCommand);
+            SetRefreshTokenToCookie(result.RefreshToken);
 
-            AccessToken token = await CreateAccessToken(mappedUser);
-
-            return Ok(token);
+            return Created("", result.AccessToken);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> Register([FromBody] RegisterUserCommand registerUserCommand)
+        private void SetRefreshTokenToCookie(RefreshToken refreshToken)
         {
-            CreatedUserDto result = await Mediator.Send(registerUserCommand);
+            CookieOptions cookieOptions = new()
+            {
+                HttpOnly = true,
+                Expires = DateTime.Now.AddDays(7)
+            };
 
-            User mappedUser = _mapper.Map<User>(result);
-
-            AccessToken token = await CreateAccessToken(mappedUser);
-
-            return Created("", token);
-        }
-
-        private async Task<AccessToken> CreateAccessToken(User user)
-        {
-            IList<OperationClaim> operationClaims = await Mediator.Send(new GetListOperationClaimByUserIdQuery(user.Id));
-
-            AccessToken createAccessToken = _tokenHelper.CreateToken(user, operationClaims);
-
-            return createAccessToken;
+            Response.Cookies.Append("refreshToken", refreshToken.Token, cookieOptions);
         }
     }
 }
