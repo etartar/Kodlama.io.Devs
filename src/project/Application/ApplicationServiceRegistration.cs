@@ -1,6 +1,8 @@
 ﻿using Application.Features.Auths.Rules;
+using Application.Features.OperationClaims.Rules;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Features.Technologies.Rules;
+using Application.Features.UserOperationClaims.Rules;
 using Application.Features.UserProfileLinks.Rules;
 using Application.Services.AuthService;
 using Core.Application.Pipelines.Authorization;
@@ -25,6 +27,8 @@ namespace Application
             services.AddScoped<TechnologyBusinessRules>();
             services.AddScoped<AuthBusinessRules>();
             services.AddScoped<UserProfileLinkBusinessRules>();
+            services.AddScoped<OperationClaimBusinessRules>();
+            services.AddScoped<UserOperationClaimBusinessRules>();
 
             services.AddScoped<IAuthService, AuthManager>();
 

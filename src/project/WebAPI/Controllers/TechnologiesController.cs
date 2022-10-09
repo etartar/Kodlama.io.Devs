@@ -43,7 +43,6 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> GetById([FromRoute] int id)
         {
             TechnologyGetByIdDto result = await Mediator.Send(new GetByIdTechnologyQuery(id));
-
             return Ok(result);
         }
 
@@ -51,7 +50,6 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Add([FromBody] CreateTechnologyCommand createTechnologyCommand)
         {
             CreatedTechnologyDto result = await Mediator.Send(createTechnologyCommand);
-
             return Created("", result);
         }
 
@@ -59,7 +57,6 @@ namespace WebAPI.Controllers
         public async Task<IActionResult> Update([FromBody] UpdateTechnologyCommand updateTechnologyCommand)
         {
             UpdatedTechnologyDto result = await Mediator.Send(updateTechnologyCommand);
-
             return Created("", result);
         }
 
