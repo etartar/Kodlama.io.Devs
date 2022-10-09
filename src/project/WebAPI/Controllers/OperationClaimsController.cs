@@ -6,11 +6,13 @@ using Application.Features.OperationClaims.Models;
 using Application.Features.OperationClaims.Queries.GetByIdOperationClaim;
 using Application.Features.OperationClaims.Queries.GetListOperationClaim;
 using Core.Application.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class OperationClaimsController : BaseController

@@ -5,10 +5,12 @@ using Application.Features.UserProfileLinks.Dtos;
 using Application.Features.UserProfileLinks.Models;
 using Application.Features.UserProfileLinks.Queries.GetListByUserIdUserProfileLink;
 using Core.Application.Requests;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]/[action]")]
     [ApiController]
     public class UserProfileLinksController : BaseController

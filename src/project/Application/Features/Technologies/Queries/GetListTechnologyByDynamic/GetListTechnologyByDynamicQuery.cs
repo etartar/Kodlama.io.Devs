@@ -1,6 +1,9 @@
-﻿using Application.Features.Technologies.Models;
+﻿using Application.Features.Auths.Constants;
+using Application.Features.Technologies.Constants;
+using Application.Features.Technologies.Models;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Dynamic;
 using Core.Persistence.Paging;
@@ -10,10 +13,16 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.Technologies.Queries.GetListTechnologyByDynamic
 {
-    public class GetListTechnologyByDynamicQuery : IRequest<TechnologyListModel>
+    public class GetListTechnologyByDynamicQuery : IRequest<TechnologyListModel>, ISecuredRequest
     {
         public PageRequest PageRequest { get; set; }
         public Dynamic Dynamic { get; set; }
+
+        public string[] Roles => new string[]
+        {
+            AuthRoleClaims.Admin,
+            TechnologyClaims.GetListByDynamic
+        };
 
         public class GetListTechnologyByDynamicQueryHandler : IRequestHandler<GetListTechnologyByDynamicQuery, TechnologyListModel>
         {

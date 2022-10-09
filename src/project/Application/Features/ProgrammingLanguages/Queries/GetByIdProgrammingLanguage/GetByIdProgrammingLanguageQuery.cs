@@ -1,13 +1,16 @@
-﻿using Application.Features.ProgrammingLanguages.Dtos;
+﻿using Application.Features.Auths.Constants;
+using Application.Features.ProgrammingLanguages.Constants;
+using Application.Features.ProgrammingLanguages.Dtos;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.ProgrammingLanguages.Queries.GetByIdProgrammingLanguage
 {
-    public class GetByIdProgrammingLanguageQuery : IRequest<ProgrammingLanguageGetByIdDto>
+    public class GetByIdProgrammingLanguageQuery : IRequest<ProgrammingLanguageGetByIdDto>, ISecuredRequest
     {
         public GetByIdProgrammingLanguageQuery(int id)
         {
@@ -15,6 +18,12 @@ namespace Application.Features.ProgrammingLanguages.Queries.GetByIdProgrammingLa
         }
 
         public int Id { get; set; }
+
+        public string[] Roles => new string[]
+        {
+            AuthRoleClaims.Admin,
+            ProgrammingLanguageClaims.GetById
+        };
 
         public class GetByIdProgrammingLanguageQueryHandler : IRequestHandler<GetByIdProgrammingLanguageQuery, ProgrammingLanguageGetByIdDto>
         {

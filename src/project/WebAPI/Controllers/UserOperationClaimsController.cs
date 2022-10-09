@@ -2,10 +2,12 @@
 using Application.Features.UserOperationClaims.Commands.DeleteUserOperationClaim;
 using Application.Features.UserOperationClaims.Dtos;
 using Application.Features.UserOperationClaims.Queries.GetListUserOperationClaim;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace WebAPI.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class UserOperationClaimsController : BaseController

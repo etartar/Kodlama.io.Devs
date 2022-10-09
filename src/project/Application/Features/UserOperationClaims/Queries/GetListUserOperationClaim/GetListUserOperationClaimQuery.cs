@@ -1,7 +1,10 @@
-﻿using Application.Features.UserOperationClaims.Dtos;
+﻿using Application.Features.Auths.Constants;
+using Application.Features.UserOperationClaims.Constants;
+using Application.Features.UserOperationClaims.Dtos;
 using Application.Features.UserOperationClaims.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Core.Persistence.Paging;
 using Core.Security.Entities;
 using MediatR;
@@ -9,9 +12,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Application.Features.UserOperationClaims.Queries.GetListUserOperationClaim
 {
-    public class GetListUserOperationClaimQuery : IRequest<List<UserOperationClaimListDto>>
+    public class GetListUserOperationClaimQuery : IRequest<List<UserOperationClaimListDto>>, ISecuredRequest
     {
         public int UserId { get; set; }
+
+        public string[] Roles => new string[]
+        {
+            AuthRoleClaims.Admin,
+            UserOperationClaimClaims.GetList
+        };
 
         public class GetListUserOperationClaimQueryHandler : IRequestHandler<GetListUserOperationClaimQuery, List<UserOperationClaimListDto>>
         {

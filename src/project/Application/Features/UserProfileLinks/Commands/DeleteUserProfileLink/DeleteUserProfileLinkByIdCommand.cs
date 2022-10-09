@@ -1,13 +1,16 @@
-﻿using Application.Features.UserProfileLinks.Dtos;
+﻿using Application.Features.Auths.Constants;
+using Application.Features.UserProfileLinks.Constants;
+using Application.Features.UserProfileLinks.Dtos;
 using Application.Features.UserProfileLinks.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.UserProfileLinks.Commands.DeleteUserProfileLink
 {
-    public class DeleteUserProfileLinkByIdCommand : IRequest<DeletedUserProfileLinkDto>
+    public class DeleteUserProfileLinkByIdCommand : IRequest<DeletedUserProfileLinkDto>, ISecuredRequest
     {
         public DeleteUserProfileLinkByIdCommand(int id)
         {
@@ -15,6 +18,12 @@ namespace Application.Features.UserProfileLinks.Commands.DeleteUserProfileLink
         }
 
         public int Id { get; set; }
+
+        public string[] Roles => new string[]
+        {
+            AuthRoleClaims.Admin,
+            UserProfileLinkClaims.Delete
+        };
 
         public class DeleteUserProfileLinkByIdCommandHandler : IRequestHandler<DeleteUserProfileLinkByIdCommand, DeletedUserProfileLinkDto>
         {

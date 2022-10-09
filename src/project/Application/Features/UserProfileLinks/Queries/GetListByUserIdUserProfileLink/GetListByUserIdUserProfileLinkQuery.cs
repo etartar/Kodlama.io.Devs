@@ -1,7 +1,10 @@
-﻿using Application.Features.UserProfileLinks.Models;
+﻿using Application.Features.Auths.Constants;
+using Application.Features.UserProfileLinks.Constants;
+using Application.Features.UserProfileLinks.Models;
 using Application.Features.UserProfileLinks.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Paging;
 using Domain.Entities;
@@ -9,10 +12,16 @@ using MediatR;
 
 namespace Application.Features.UserProfileLinks.Queries.GetListByUserIdUserProfileLink
 {
-    public class GetListByUserIdUserProfileLinkQuery : IRequest<UserProfileLinkModel>
+    public class GetListByUserIdUserProfileLinkQuery : IRequest<UserProfileLinkModel>, ISecuredRequest
     {
         public PageRequest PageRequest { get; set; }
         public int UserId { get; set; }
+
+        public string[] Roles => new string[]
+        {
+            AuthRoleClaims.Admin,
+            UserProfileLinkClaims.GetListByUserId
+        };
 
         public class GetListByUserIdUserProfileLinkQueryHandler : IRequestHandler<GetListByUserIdUserProfileLinkQuery, UserProfileLinkModel>
         {

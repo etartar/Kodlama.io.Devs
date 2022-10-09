@@ -1,13 +1,16 @@
-﻿using Application.Features.Technologies.Dtos;
+﻿using Application.Features.Auths.Constants;
+using Application.Features.Technologies.Constants;
+using Application.Features.Technologies.Dtos;
 using Application.Features.Technologies.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.Technologies.Commands.DeleteTechnology
 {
-    public class DeleteTechnologyByIdCommand : IRequest<DeletedTechnologyDto>
+    public class DeleteTechnologyByIdCommand : IRequest<DeletedTechnologyDto>, ISecuredRequest
     {
         public DeleteTechnologyByIdCommand(int id)
         {
@@ -15,6 +18,12 @@ namespace Application.Features.Technologies.Commands.DeleteTechnology
         }
 
         public int Id { get; set; }
+
+        public string[] Roles => new string[]
+        {
+            AuthRoleClaims.Admin,
+            TechnologyClaims.Delete
+        };
 
         public class DeleteTechnologyByIdCommandHandler : IRequestHandler<DeleteTechnologyByIdCommand, DeletedTechnologyDto>
         {

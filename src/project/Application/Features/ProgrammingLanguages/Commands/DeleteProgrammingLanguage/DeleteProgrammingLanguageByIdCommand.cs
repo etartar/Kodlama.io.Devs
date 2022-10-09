@@ -1,13 +1,16 @@
-﻿using Application.Features.ProgrammingLanguages.Dtos;
+﻿using Application.Features.Auths.Constants;
+using Application.Features.ProgrammingLanguages.Constants;
+using Application.Features.ProgrammingLanguages.Dtos;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
+using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
 
 namespace Application.Features.ProgrammingLanguages.Commands.DeleteProgrammingLanguage
 {
-    public class DeleteProgrammingLanguageByIdCommand : IRequest<DeletedProgrammingLanguageDto>
+    public class DeleteProgrammingLanguageByIdCommand : IRequest<DeletedProgrammingLanguageDto>, ISecuredRequest
     {
         public DeleteProgrammingLanguageByIdCommand(int id)
         {
@@ -15,6 +18,12 @@ namespace Application.Features.ProgrammingLanguages.Commands.DeleteProgrammingLa
         }
 
         public int Id { get; set; }
+
+        public string[] Roles => new string[]
+        {
+            AuthRoleClaims.Admin,
+            ProgrammingLanguageClaims.Delete
+        };
 
         public class DeleteProgrammingLanguageByIdCommandHandler : IRequestHandler<DeleteProgrammingLanguageByIdCommand, DeletedProgrammingLanguageDto>
         {
