@@ -1,29 +1,24 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.UserProfileLinks.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.UserProfileLinks.Dtos;
 using Application.Features.UserProfileLinks.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.UserProfileLinks.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.UserProfileLinks.Commands.DeleteUserProfileLink
 {
-    public class DeleteUserProfileLinkByIdCommand : IRequest<DeletedUserProfileLinkDto>, ISecuredRequest
+    public class DeleteUserProfileLinkByIdCommand : SecuredBaseCommand<DeletedUserProfileLinkDto>
     {
         public DeleteUserProfileLinkByIdCommand(int id)
         {
             Id = id;
+            SetRoles(Admin, UserProfileLinkDelete);
         }
 
         public int Id { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            UserProfileLinkClaims.Delete
-        };
 
         public class DeleteUserProfileLinkByIdCommandHandler : IRequestHandler<DeleteUserProfileLinkByIdCommand, DeletedUserProfileLinkDto>
         {

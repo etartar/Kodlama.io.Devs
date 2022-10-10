@@ -1,26 +1,25 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.Technologies.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.Technologies.Models;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Application.Features.Technologies.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.Technologies.Queries.GetListTechnology
 {
-    public class GetListTechnologyQuery : IRequest<TechnologyListModel>, ISecuredRequest
+    public class GetListTechnologyQuery : SecuredBaseQuery<TechnologyListModel>
     {
-        public PageRequest PageRequest { get; set; }
-
-        public string[] Roles => new string[]
+        public GetListTechnologyQuery()
         {
-            AuthRoleClaims.Admin,
-            TechnologyClaims.GetList
-        };
+            SetRoles(Admin, TechnologyGetList);
+        }
+
+        public PageRequest PageRequest { get; set; }
 
         public class GetListTechnologyQueryHandler : IRequestHandler<GetListTechnologyQuery, TechnologyListModel>
         {

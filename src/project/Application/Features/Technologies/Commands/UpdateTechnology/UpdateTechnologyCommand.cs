@@ -1,26 +1,25 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.Technologies.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.Technologies.Dtos;
 using Application.Features.Technologies.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.Technologies.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.Technologies.Commands.UpdateTechnology
 {
-    public class UpdateTechnologyCommand : IRequest<UpdatedTechnologyDto>, ISecuredRequest
+    public class UpdateTechnologyCommand : SecuredBaseCommand<UpdatedTechnologyDto>
     {
+        public UpdateTechnologyCommand()
+        {
+            SetRoles(Admin, TechnologyUpdate);
+        }
+
         public int Id { get; set; }
         public int ProgrammingLanguageId { get; set; }
         public string Name { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            TechnologyClaims.Update
-        };
 
         public class UpdateTechnologyCommandHandler : IRequestHandler<UpdateTechnologyCommand, UpdatedTechnologyDto>
         {

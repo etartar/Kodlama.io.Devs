@@ -1,30 +1,25 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.ProgrammingLanguages.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.ProgrammingLanguages.Models;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.ProgrammingLanguages.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.ProgrammingLanguages.Queries.GetListProgrammingLanguage
 {
-    public class GetListProgrammingLanguageQuery : IRequest<ProgrammingLanguageListModel>, ISecuredRequest
+    public class GetListProgrammingLanguageQuery : SecuredBaseQuery<ProgrammingLanguageListModel>
     {
         public GetListProgrammingLanguageQuery(PageRequest pageRequest)
         {
             PageRequest = pageRequest;
+            SetRoles(Admin, ProgrammingLanguageGetList);
         }
 
         public PageRequest PageRequest { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            ProgrammingLanguageClaims.GetList
-        };
 
         public class GetListProgrammingLanguageQueryHandler : IRequestHandler<GetListProgrammingLanguageQuery, ProgrammingLanguageListModel>
         {

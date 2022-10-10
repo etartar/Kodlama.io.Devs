@@ -1,28 +1,27 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.Technologies.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.Technologies.Models;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Dynamic;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Application.Features.Technologies.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.Technologies.Queries.GetListTechnologyByDynamic
 {
-    public class GetListTechnologyByDynamicQuery : IRequest<TechnologyListModel>, ISecuredRequest
+    public class GetListTechnologyByDynamicQuery : SecuredBaseQuery<TechnologyListModel>
     {
+        public GetListTechnologyByDynamicQuery()
+        {
+            SetRoles(Admin, TechnologyGetList);
+        }
+
         public PageRequest PageRequest { get; set; }
         public Dynamic Dynamic { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            TechnologyClaims.GetListByDynamic
-        };
 
         public class GetListTechnologyByDynamicQueryHandler : IRequestHandler<GetListTechnologyByDynamicQuery, TechnologyListModel>
         {

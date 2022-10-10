@@ -1,27 +1,26 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.UserProfileLinks.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.UserProfileLinks.Models;
 using Application.Features.UserProfileLinks.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Paging;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.UserProfileLinks.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.UserProfileLinks.Queries.GetListByUserIdUserProfileLink
 {
-    public class GetListByUserIdUserProfileLinkQuery : IRequest<UserProfileLinkModel>, ISecuredRequest
+    public class GetListByUserIdUserProfileLinkQuery : SecuredBaseQuery<UserProfileLinkModel>
     {
+        public GetListByUserIdUserProfileLinkQuery()
+        {
+            SetRoles(Admin, UserProfileLinkGetList);
+        }
+
         public PageRequest PageRequest { get; set; }
         public int UserId { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            UserProfileLinkClaims.GetListByUserId
-        };
 
         public class GetListByUserIdUserProfileLinkQueryHandler : IRequestHandler<GetListByUserIdUserProfileLinkQuery, UserProfileLinkModel>
         {

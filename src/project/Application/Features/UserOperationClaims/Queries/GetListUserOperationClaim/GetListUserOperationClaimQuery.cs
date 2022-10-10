@@ -1,26 +1,25 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.UserOperationClaims.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.UserOperationClaims.Dtos;
 using Application.Features.UserOperationClaims.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Core.Persistence.Paging;
 using Core.Security.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Application.Features.UserOperationClaims.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.UserOperationClaims.Queries.GetListUserOperationClaim
 {
-    public class GetListUserOperationClaimQuery : IRequest<List<UserOperationClaimListDto>>, ISecuredRequest
+    public class GetListUserOperationClaimQuery : SecuredBaseQuery<List<UserOperationClaimListDto>>
     {
-        public int UserId { get; set; }
-
-        public string[] Roles => new string[]
+        public GetListUserOperationClaimQuery()
         {
-            AuthRoleClaims.Admin,
-            UserOperationClaimClaims.GetList
-        };
+            SetRoles(Admin, UserOperationClaimGetList);
+        }
+
+        public int UserId { get; set; }
 
         public class GetListUserOperationClaimQueryHandler : IRequestHandler<GetListUserOperationClaimQuery, List<UserOperationClaimListDto>>
         {

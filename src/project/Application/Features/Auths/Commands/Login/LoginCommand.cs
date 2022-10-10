@@ -7,27 +7,27 @@ using Core.Security.Entities;
 using Core.Security.JWT;
 using MediatR;
 
-namespace Application.Features.Auths.Queries.Login
+namespace Application.Features.Auths.Commands.Login
 {
-    public class LoginQuery : IRequest<LoginedDto>
+    public class LoginCommand : IRequest<LoggedDto>
     {
         public UserForLoginDto UserForLoginDto { get; set; }
         public string IpAddress { get; set; }
 
-        public class LoginQueryHandler : IRequestHandler<LoginQuery, LoginedDto>
+        public class LoginCommandHandler : IRequestHandler<LoginCommand, LoggedDto>
         {
             private readonly AuthBusinessRules _authBusinessRules;
             private readonly IUserRepository _userRepository;
             private readonly IAuthService _authService;
 
-            public LoginQueryHandler(AuthBusinessRules authBusinessRules, IUserRepository userRepository, IAuthService authService)
+            public LoginCommandHandler(AuthBusinessRules authBusinessRules, IUserRepository userRepository, IAuthService authService)
             {
                 _authBusinessRules = authBusinessRules;
                 _userRepository = userRepository;
                 _authService = authService;
             }
 
-            public async Task<LoginedDto> Handle(LoginQuery request, CancellationToken cancellationToken)
+            public async Task<LoggedDto> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
                 User? user = await _userRepository.GetAsync(x => x.Email == request.UserForLoginDto.Email);
 
@@ -38,7 +38,7 @@ namespace Application.Features.Auths.Queries.Login
                 RefreshToken createdRefreshToken = await _authService.CreateRefreshToken(user, request.IpAddress);
                 RefreshToken addedRefreshToken = await _authService.AddRefreshToken(createdRefreshToken);
 
-                return new LoginedDto
+                return new LoggedDto
                 {
                     AccessToken = createdAccessToken,
                     RefreshToken = addedRefreshToken,

@@ -1,25 +1,23 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.OperationClaims.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.OperationClaims.Dtos;
 using Application.Features.OperationClaims.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Core.Security.Entities;
 using MediatR;
+using static Application.Features.OperationClaims.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.OperationClaims.Commands.UpdateOperationClaim
 {
-    public class UpdateOperationClaimCommand : IRequest<UpdatedOperationClaimDto>, ISecuredRequest
+    public class UpdateOperationClaimCommand : SecuredBaseCommand<UpdatedOperationClaimDto>
     {
+        public UpdateOperationClaimCommand() : base(Admin, OperationClaimUpdate)
+        {
+        }
+
         public int Id { get; set; }
         public string Name { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            OperationClaimClaims.Update
-        };
 
         public class UpdateOperationClaimCommandHandler : IRequestHandler<UpdateOperationClaimCommand, UpdatedOperationClaimDto>
         {

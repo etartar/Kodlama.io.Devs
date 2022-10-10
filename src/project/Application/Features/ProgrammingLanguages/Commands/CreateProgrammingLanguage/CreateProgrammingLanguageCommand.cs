@@ -1,24 +1,23 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.ProgrammingLanguages.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.ProgrammingLanguages.Dtos;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.ProgrammingLanguages.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.ProgrammingLanguages.Commands.CreateProgrammingLanguage
 {
-    public class CreateProgrammingLanguageCommand : IRequest<CreatedProgrammingLanguageDto>, ISecuredRequest
+    public class CreateProgrammingLanguageCommand : SecuredBaseCommand<CreatedProgrammingLanguageDto>
     {
-        public string Name { get; set; }
-
-        public string[] Roles => new string[]
+        public CreateProgrammingLanguageCommand()
         {
-            AuthRoleClaims.Admin,
-            ProgrammingLanguageClaims.Create
-        };
+            SetRoles(Admin, ProgrammingLanguageAdd);
+        }
+
+        public string Name { get; set; }
 
         public class CreateProgrammingLanguageCommandHandler : IRequestHandler<CreateProgrammingLanguageCommand, CreatedProgrammingLanguageDto>
         {

@@ -1,29 +1,24 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.ProgrammingLanguages.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.ProgrammingLanguages.Dtos;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.ProgrammingLanguages.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.ProgrammingLanguages.Commands.DeleteProgrammingLanguage
 {
-    public class DeleteProgrammingLanguageByIdCommand : IRequest<DeletedProgrammingLanguageDto>, ISecuredRequest
+    public class DeleteProgrammingLanguageByIdCommand : SecuredBaseCommand<DeletedProgrammingLanguageDto>
     {
         public DeleteProgrammingLanguageByIdCommand(int id)
         {
             Id = id;
+            SetRoles(Admin, ProgrammingLanguageDelete);
         }
 
         public int Id { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            ProgrammingLanguageClaims.Delete
-        };
 
         public class DeleteProgrammingLanguageByIdCommandHandler : IRequestHandler<DeleteProgrammingLanguageByIdCommand, DeletedProgrammingLanguageDto>
         {

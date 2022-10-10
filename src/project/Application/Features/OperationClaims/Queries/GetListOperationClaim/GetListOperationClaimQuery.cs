@@ -1,25 +1,23 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.OperationClaims.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.OperationClaims.Models;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Core.Application.Requests;
 using Core.Persistence.Paging;
 using Core.Security.Entities;
 using MediatR;
+using static Application.Features.OperationClaims.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.OperationClaims.Queries.GetListOperationClaim
 {
-    public class GetListOperationClaimQuery : IRequest<OperationClaimListModel>, ISecuredRequest
+    public class GetListOperationClaimQuery : SecuredBaseQuery<OperationClaimListModel>
     {
-        public PageRequest PageRequest { get; set; }
-
-        public string[] Roles => new string[]
+        public GetListOperationClaimQuery() : base(Admin, OperationClaimGetList)
         {
-            AuthRoleClaims.Admin,
-            OperationClaimClaims.GetList
-        };
+        }
+
+        public PageRequest PageRequest { get; set; }
 
         public class GetListOperationClaimQueryHandler : IRequestHandler<GetListOperationClaimQuery, OperationClaimListModel>
         {

@@ -1,30 +1,25 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.Technologies.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.Technologies.Dtos;
 using Application.Features.Technologies.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
+using static Application.Features.Technologies.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.Technologies.Queries.GetByIdTechnology
 {
-    public class GetByIdTechnologyQuery : IRequest<TechnologyGetByIdDto>, ISecuredRequest
+    public class GetByIdTechnologyQuery : SecuredBaseQuery<TechnologyGetByIdDto>
     {
         public GetByIdTechnologyQuery(int id)
         {
             Id = id;
+            SetRoles(Admin, TechnologyGetById);
         }
 
         public int Id { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            TechnologyClaims.GetById
-        };
 
         public class GetByIdTechnologyQueryHandler : IRequestHandler<GetByIdTechnologyQuery, TechnologyGetByIdDto>
         {

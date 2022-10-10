@@ -1,27 +1,26 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.UserProfileLinks.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.UserProfileLinks.Dtos;
 using Application.Features.UserProfileLinks.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.UserProfileLinks.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.UserProfileLinks.Commands.UpdateUserProfileLink
 {
-    public class UpdateUserProfileLinkCommand : IRequest<UpdatedUserProfileLinkDto>, ISecuredRequest
+    public class UpdateUserProfileLinkCommand : SecuredBaseCommand<UpdatedUserProfileLinkDto>
     {
+        public UpdateUserProfileLinkCommand()
+        {
+            SetRoles(Admin, UserProfileLinkUpdate);
+        }
+
         public int Id { get; set; }
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Link { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            UserProfileLinkClaims.Update
-        };
 
         public class UpdateUserProfileLinkCommandHandler : IRequestHandler<UpdateUserProfileLinkCommand, UpdatedUserProfileLinkDto>
         {

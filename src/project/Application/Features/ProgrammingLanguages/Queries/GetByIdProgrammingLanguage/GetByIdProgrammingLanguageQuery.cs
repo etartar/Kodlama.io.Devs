@@ -1,29 +1,24 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.ProgrammingLanguages.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.ProgrammingLanguages.Dtos;
 using Application.Features.ProgrammingLanguages.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.ProgrammingLanguages.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.ProgrammingLanguages.Queries.GetByIdProgrammingLanguage
 {
-    public class GetByIdProgrammingLanguageQuery : IRequest<ProgrammingLanguageGetByIdDto>, ISecuredRequest
+    public class GetByIdProgrammingLanguageQuery : SecuredBaseQuery<ProgrammingLanguageGetByIdDto>
     {
         public GetByIdProgrammingLanguageQuery(int id)
         {
             Id = id;
+            SetRoles(Admin, ProgrammingLanguageGetById);
         }
 
         public int Id { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            ProgrammingLanguageClaims.GetById
-        };
 
         public class GetByIdProgrammingLanguageQueryHandler : IRequestHandler<GetByIdProgrammingLanguageQuery, ProgrammingLanguageGetByIdDto>
         {

@@ -1,26 +1,25 @@
-﻿using Application.Features.Auths.Constants;
-using Application.Features.UserProfileLinks.Constants;
+﻿using Application.Common.MediatR;
 using Application.Features.UserProfileLinks.Dtos;
 using Application.Features.UserProfileLinks.Rules;
 using Application.Services.Repositories;
 using AutoMapper;
-using Core.Application.Pipelines.Authorization;
 using Domain.Entities;
 using MediatR;
+using static Application.Features.UserProfileLinks.Constants.OperationClaims;
+using static Domain.Constants.OperationClaims;
 
 namespace Application.Features.UserProfileLinks.Commands.CreateUserProfileLink
 {
-    public class CreateUserProfileLinkCommand : IRequest<CreatedUserProfileLinkDto>, ISecuredRequest
+    public class CreateUserProfileLinkCommand : SecuredBaseCommand<CreatedUserProfileLinkDto>
     {
+        public CreateUserProfileLinkCommand()
+        {
+            SetRoles(Admin, UserProfileLinkAdd);
+        }
+
         public int UserId { get; set; }
         public string Name { get; set; }
         public string Link { get; set; }
-
-        public string[] Roles => new string[]
-        {
-            AuthRoleClaims.Admin,
-            UserProfileLinkClaims.Create
-        };
 
         public class CreateUserProfileLinkCommandHandler : IRequestHandler<CreateUserProfileLinkCommand, CreatedUserProfileLinkDto>
         {
